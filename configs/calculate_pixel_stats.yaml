@@ -1,0 +1,8 @@
+TableLoader:
+  dl1_parameters: false
+
+PixelStatisticsCalculatorTool:
+  input_column_name: image
+
+SizeChunking:
+  chunk_size: 1000

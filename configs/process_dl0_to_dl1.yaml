@@ -1,0 +1,27 @@
+ProcessorTool:
+  monitoring_sources:
+    - HDF5MonitoringSource
+
+# The Makefile supplies the matching pointing and pedestal-coefficient files through
+# --HDF5MonitoringSource.input_files for each run.
+
+HDF5MonitoringSource:
+  # Allow early events to use the first pedestal calibration chunk.
+  timestamp_tolerance: 60 s
+
+CameraCalibrator:
+  image_extractor_type: FullWaveformSum
+
+EventTypeFilter:
+  allowed_types:
+    - SUBARRAY
+
+DataWriter:
+  Contact:
+    name: Maximilian Linhoff
+    email: maximilian.linhoff@posteo.de
+    organization: personal
+
+  write_dl1_images: true
+  write_dl1_parameters: true
+  transform_image: true

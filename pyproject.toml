@@ -1,0 +1,15 @@
+[project]
+authors = [{name = "Maximilian Linhoff", email = "maximilian.linhoff@posteo.de"}]
+name = "whipple-analysis-ctapipe"
+requires-python = ">= 3.11"
+version = "0.1.0"
+dependencies = ["ctapipe-io-whipple @ git+https://github.com/maxnoe/ctapipe_io_whipple@main"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+ctapipe = "==0.33.0"
