@@ -6,7 +6,7 @@ DL1 := $(patsubst data/%.fz.xz,build/%.dl1.h5,$(INPUTS))
 PYTHON ?= python
 
 .PHONY: all
-all: $(PEDESTAL_STATS) $(DL1)
+all: $(PEDESTAL_STATS) $(DL1) build/raw10_run_summary.csv
 
 .PHONY: dl1
 dl1: $(DL1)
@@ -59,6 +59,10 @@ build/%.ped.mon.h5: build/%.ped.dl1.h5 configs/calculate_pixel_stats.yaml script
 		--overwrite  \
 		--log-level=INFO
 	$(PYTHON) scripts/pedestal_statistics_to_coefficients.py "$@"
+
+
+build/raw10_run_summary.csv:
+	curl -sSfL https://zenodo.org/records/16890876/files/raw10_run_summary.csv.xz?download=1 | xz -d -c > $@
 
 
 .PHONY: clean
