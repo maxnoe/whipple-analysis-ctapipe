@@ -1,6 +1,10 @@
 CameraCalibrator:
   image_extractor_type: FullWaveformSum
 
+WhippleEventSource:
+  # TODO: find better value for 1997 data
+  dc_to_pe: 0.5
+
 EventTypeFilter:
   allowed_types:
     - SKY_PEDESTAL

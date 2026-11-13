@@ -1,12 +1,21 @@
-INPUTS := $(wildcard data/*.fz.xz)
+ON_INPUTS := $(wildcard data/on/*.fz.xz)
+OFF_INPUTS := $(wildcard data/off/*.fz.xz)
+FF_INPUTS := $(wildcard data/ff/*.fz.xz)
+
+INPUTS := $(ON_INPUTS) $(OFF_INPUTS)
+
 PEDESTAL_IMAGES := $(patsubst data/%.fz.xz,build/%.ped.dl1.h5,$(INPUTS))
 PEDESTAL_STATS := $(patsubst data/%.fz.xz,build/%.ped.mon.h5,$(INPUTS))
+
 POINTING := $(patsubst data/%.fz.xz,build/%.pointing.mon.h5,$(INPUTS))
-DL1 := $(patsubst data/%.fz.xz,build/%.dl1.h5,$(INPUTS))
+
+DL1_ON := $(patsubst data/%.fz.xz,build/%.dl1.h5,$(ON_INPUTS))
+DL1_OFF := $(patsubst data/%.fz.xz,build/%.dl1.h5,$(OFF_INPUTS))
+
 PYTHON ?= python
 
 .PHONY: all
-all: $(PEDESTAL_STATS) $(DL1) build/raw10_run_summary.csv
+all: build/on.dl1.h5 build/off.dl1.h5
 
 .PHONY: dl1
 dl1: $(DL1)
@@ -18,7 +27,7 @@ pointing: $(POINTING)
 .SECONDARY: $(PEDESTAL_IMAGES) $(POINTING)
 
 build:
-	mkdir -p $@
+	mkdir -p $@ $@/on $@/off $@/ff
 
 clean:
 	rm -rf build
@@ -61,8 +70,26 @@ build/%.ped.mon.h5: build/%.ped.dl1.h5 configs/calculate_pixel_stats.yaml script
 	$(PYTHON) scripts/pedestal_statistics_to_coefficients.py "$@"
 
 
+build/on.dl1.h5: $(DL1_ON)
+	ctapipe-merge -o $@ $(DL1_ON)
+
+
+build/off.dl1.h5: $(DL1_OFF)
+	ctapipe-merge -o $@ $(DL1_OFF)
+
+
 build/raw10_run_summary.csv:
 	curl -sSfL https://zenodo.org/records/16890876/files/raw10_run_summary.csv.xz?download=1 | xz -d -c > $@
 
 
-.PHONY: clean
+download: | data
+	python scripts/download_data.py
+
+data:
+	mkdir -p data
+
+
+.PHONY: clean download
+
+# keep intermediate files
+.PRECIOUS: build/%.ped.mon.h5 

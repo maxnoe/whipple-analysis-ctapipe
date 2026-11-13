@@ -4,3 +4,4 @@ build
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+.ipynb_checkpoints

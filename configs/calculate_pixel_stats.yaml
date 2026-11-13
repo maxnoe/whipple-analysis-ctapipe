@@ -5,4 +5,5 @@ PixelStatisticsCalculatorTool:
   input_column_name: image
 
 SizeChunking:
-  chunk_size: 1000
+  chunk_size: 5000
+  allow_undersized_tables: True

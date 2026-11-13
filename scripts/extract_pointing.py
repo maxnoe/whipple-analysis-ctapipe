@@ -120,7 +120,7 @@ def extract_pointing(input_path, output_path, overwrite=False, append=False):
         raise FileExistsError(f"{output_path} exists; use --overwrite to replace it")
 
     pointing = read_pointing(input_path)
-    with EventSource(input_url=input_path) as source:
+    with EventSource(input_url=input_path, dc_to_pe=1.0) as source:
         subarray = source.subarray
         (tel_id,) = subarray.tel_ids
         (obs_id,) = source.observation_blocks

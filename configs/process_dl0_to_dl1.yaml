@@ -2,6 +2,10 @@ ProcessorTool:
   monitoring_sources:
     - HDF5MonitoringSource
 
+WhippleEventSource:
+  # TODO: find better value for 1997 data
+  dc_to_pe: 0.5
+
 # The Makefile supplies the matching pointing and pedestal-coefficient files through
 # --HDF5MonitoringSource.input_files for each run.
 
@@ -25,3 +29,9 @@ DataWriter:
   write_dl1_images: true
   write_dl1_parameters: true
   transform_image: true
+
+ImageProcessor:
+  image_cleaner_type: TailcutsImageCleaner
+  TailcutsImageCleaner:
+    picture_threshold_pe: 8.5 # ~ 5.0 pedestal std
+    boundary_threshold_pe: 4.25
