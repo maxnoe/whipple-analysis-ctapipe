@@ -82,8 +82,8 @@ build/raw10_run_summary.csv:
 	curl -sSfL https://zenodo.org/records/16890876/files/raw10_run_summary.csv.xz?download=1 | xz -d -c > $@
 
 
-download: | data
-	python scripts/download_data.py
+download: scripts/download.py | data
+	python $<
 
 data:
 	mkdir -p data
