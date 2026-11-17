@@ -2,7 +2,6 @@
 """Extract Whipple tracking records into a ctapipe HDF5 monitoring file.
 
 Use --append to attach pointing to an existing DL1 file.
-Linear extrapolation covers event times outside the recorded tracking range.
 Requires the same Python environment as ctapipe-process and ctapipe_io_whipple.
 """
 
@@ -23,57 +22,14 @@ from ctapipe.io.astropy_helpers import write_table
 from ctapipe.io.datawriter import DATA_MODEL_VERSION
 from ctapipe.io.hdf5dataformat import DL0_TEL_POINTING_GROUP, OBSERVATION_BLOCK_TABLE
 from ctapipe.io.metadata import Contact, write_product_metadata_hdf5
-from ctapipe_io_whipple.eventsource import _event_time
-
-
-def extrapolate_to_events(pointing, first_event, last_event):
-    """Extend to the event bounds in TAI MJD using the closest two samples."""
-    times = pointing["time"].tai.mjd
-    targets = [
-        time for time in (first_event, last_event)
-        if time < times[0] or time > times[-1]
-    ]
-    if not targets:
-        return pointing
-    if len(pointing) < 2:
-        raise ValueError("At least two tracking samples are needed to extrapolate")
-
-    azimuth = np.unwrap(pointing["azimuth"].quantity.to_value(u.rad))
-    altitude = pointing["altitude"].quantity.to_value(u.rad)
-    result = pointing.copy()
-    for time in sorted(set(targets)):
-        i, j = (0, 1) if time < times[0] else (-2, -1)
-        fraction = (time - times[i]) / (times[j] - times[i])
-        az = azimuth[i] + fraction * (azimuth[j] - azimuth[i])
-        alt = altitude[i] + fraction * (altitude[j] - altitude[i])
-        if not -np.pi / 2 <= alt <= np.pi / 2:
-            raise ValueError("Extrapolated pointing altitude is outside [-90, 90] degrees")
-        result.add_row([
-            Time(time, format="mjd", scale="tai"),
-            ((az % (2 * np.pi)) * u.rad).to_value(result["azimuth"].unit),
-            (alt * u.rad).to_value(result["altitude"].unit),
-        ])
-    result.sort("time")
-    return result
 
 
 def read_pointing(input_path):
     """Read actual telescope alt/az and UTC MJD timestamps from tracking banks."""
     rows = []
-    first_event = np.inf
-    last_event = -np.inf
     with fzreader.FZReader(str(input_path)) as reader:
         for record in reader:
             if not record.get("record_was_decoded", False):
-                continue
-            if record.get("record_type") in ("event", "frame"):
-                # Match WhippleEventSource's GPS timestamps and DAQ fallback.
-                event_time, time_source = _event_time(record)
-                mjd = event_time.tai.mjd
-                if time_source == "unknown" or not np.isfinite(mjd):
-                    raise ValueError("Cannot cover an event with an unknown timestamp")
-                first_event = min(first_event, mjd)
-                last_event = max(last_event, mjd)
                 continue
             if record.get("record_type") != "tracking":
                 continue
@@ -96,16 +52,13 @@ def read_pointing(input_path):
     if np.any(np.diff(values[:, 0]) == 0):
         raise ValueError("Tracking records contain duplicate timestamps")
 
-    pointing = Table(
+    return Table(
         {
             "time": Time(values[:, 0], format="mjd", scale="utc"),
             "azimuth": (values[:, 1] * u.deg).to(u.rad),
             "altitude": (values[:, 2] * u.deg).to(u.rad),
         }
     )
-    if np.isfinite(first_event):
-        pointing = extrapolate_to_events(pointing, first_event, last_event)
-    return pointing
 
 
 def extract_pointing(input_path, output_path, overwrite=False, append=False):

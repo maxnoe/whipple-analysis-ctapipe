@@ -13,6 +13,11 @@ HDF5MonitoringSource:
   # Allow early events to use the first pedestal calibration chunk.
   timestamp_tolerance: 60 s
 
+# Cover event times outside the recorded tracking range.
+PointingInterpolator:
+  bounds_error: false
+  extrapolate: true
+
 CameraCalibrator:
   image_extractor_type: FullWaveformSum
 

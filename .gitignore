@@ -5,3 +5,4 @@ build
 .pixi/*
 !.pixi/config.toml
 .ipynb_checkpoints
+__pycache__
