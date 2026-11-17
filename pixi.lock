@@ -274,7 +274,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/widgetsnbextension-4.0.16-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.2-pyh5ded981_0.conda
       - pypi: git+https://github.com/Whipple10m/pyfzreader#fd306dbe95e02d6024704fc6ad0ab24f37925bdf
-      - pypi: git+https://github.com/cta-observatory/ctapipe?rev=fix-chunk-size#92634bdb84b7a34110da8a7253eed92d035f559c
+      - pypi: git+https://github.com/cta-observatory/ctapipe?rev=main#653f80bcd03f3bbcbb21023168371b5baef5250e
       - pypi: git+https://github.com/maxnoe/ctapipe_io_whipple?rev=main#724cf028385d776191e9acd0162e9d216e424b56
       - pypi: https://files.pythonhosted.org/packages/18/53/84099323c2ec4be98d935f63c033ac4151ee83836ca1050ede3b3aadf155/joblib-1.6.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1e/0c/5346358b3a20275d256978c35203ddc2c8617f78c1b23795b79ba22ced6d/dnspython-2.9.2-py3-none-any.whl
@@ -509,7 +509,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zlib-ng-2.3.3-h31dac16_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hf451053_7.conda
       - pypi: git+https://github.com/Whipple10m/pyfzreader#fd306dbe95e02d6024704fc6ad0ab24f37925bdf
-      - pypi: git+https://github.com/cta-observatory/ctapipe?rev=fix-chunk-size#92634bdb84b7a34110da8a7253eed92d035f559c
+      - pypi: git+https://github.com/cta-observatory/ctapipe?rev=main#653f80bcd03f3bbcbb21023168371b5baef5250e
       - pypi: git+https://github.com/maxnoe/ctapipe_io_whipple?rev=main#724cf028385d776191e9acd0162e9d216e424b56
       - pypi: https://files.pythonhosted.org/packages/18/53/84099323c2ec4be98d935f63c033ac4151ee83836ca1050ede3b3aadf155/joblib-1.6.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1e/0c/5346358b3a20275d256978c35203ddc2c8617f78c1b23795b79ba22ced6d/dnspython-2.9.2-py3-none-any.whl
@@ -5870,9 +5870,9 @@ packages:
   name: fzreader
   version: 1.0.1
   requires_python: '>=3.9'
-- pypi: git+https://github.com/cta-observatory/ctapipe?rev=fix-chunk-size#92634bdb84b7a34110da8a7253eed92d035f559c
+- pypi: git+https://github.com/cta-observatory/ctapipe?rev=main#653f80bcd03f3bbcbb21023168371b5baef5250e
   name: ctapipe
-  version: 0.33.1.dev5+g92634bdb8
+  version: 0.33.1.dev11+g653f80bcd
   requires_dist:
   - astropy>=7.2,<9.0.0
   - ctao-datamodel>=1.4.0,<2.0.0

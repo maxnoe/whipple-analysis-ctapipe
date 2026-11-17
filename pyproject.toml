@@ -5,7 +5,7 @@ requires-python = ">= 3.11"
 version = "0.1.0"
 dependencies = [
   "ctapipe-io-whipple @ git+https://github.com/maxnoe/ctapipe_io_whipple@main",
-  "ctapipe @ git+https://github.com/cta-observatory/ctapipe@fix-chunk-size",
+  "ctapipe @ git+https://github.com/cta-observatory/ctapipe@main",
 ]
 
 [tool.pixi.workspace]

@@ -15,7 +15,7 @@ DL1_OFF := $(patsubst data/%.fz.xz,build/%.dl1.h5,$(OFF_INPUTS))
 PYTHON ?= python
 
 .PHONY: all
-all: build/on.dl1.h5 build/off.dl1.h5
+all: build/on.dl1.h5 build/off.dl1.h5 build/flatfield/gt005105.dl1.h5
 
 .PHONY: dl1
 dl1: $(DL1)
@@ -27,7 +27,7 @@ pointing: $(POINTING)
 .SECONDARY: $(PEDESTAL_IMAGES) $(POINTING)
 
 build:
-	mkdir -p $@ $@/on $@/off $@/ff
+	mkdir -p $@ $@/on $@/off $@/flatfield
 
 clean:
 	rm -rf build
